@@ -1,0 +1,211 @@
+2022-02
+==========
+
+fingertip model 代码阅读
+***************************
+
+\*.sh
+---------------
+
+.. code-block:: bash
+
+        #!/usr/bin/env bash
+        model_root_path="./models/train-palm-spoofing/20220206"
+        log_dir="${model_root_path}/logs"
+        log="${log_dir}/log"
+        mkdir -p "${log_dir}"
+
+        python -u train.py \
+        --datasets \
+        /path/to/train/dataset_1 \
+        /path/to/train/dataset_2 \
+        --validation_dataset \
+        /path/to/validation/dataset_1 \
+        /path/to/validation/dataset_2 \
+        --net \
+        RFB \
+        --cuda_index \
+        0 \
+        2>&1 | tee "$log"
+
+.. code-block:: bash
+
+   2>&1 | tee "$log"
+
+import
+---------------------
+
+.. code-block:: python
+
+   # alphabetical order
+   import argparse
+   import itertools
+   import logging
+   import numpy as np
+   import os
+   import sys
+
+   import torch
+   from torch import nn
+   from torch.optim.lr_scheduler import CosineAnnealingLR, MultiStepLR
+   from torch.utils.data import DataLoader, ConcatDataset
+
+   from vision.datasets.finger_dataset import FingerDataset
+
+   parser = argparse.ArgumentParser(description = 'train with pytorch')
+   parser.add_argument("--datasets", nargs = "+", help = "Dataset directory path")
+
+   args = parser.parse_args()
+   input_img_size = args.input_size
+   logging.info("input size : {}".format(input_img_size))
+
+   def train(loader, net, criterion, optimizer, device):
+        net.train(True)
+        for i, data in enumerate(loader):
+                images, points, lables, ener
+                ...
+
+   train_dataset = ConcatDataset(datasets)
+   train_loader = DataLoader(train_dataset, args.batch_size, num_workers, shuffer=True)
+
+
+.. code-block:: python
+   
+   """
+   Dataset for 
+
+   Copyright (c)
+   """
+
+
+
+
+libraries & functions
+-----------------------
+
+1. :code:`logging` in python and in C++
+2. 定义 :code:`global` 变量。
+3. :code:`enumerate`
+4. :code:`np.newaxis`
+
+global in python
+--------------------------
+
+In Python, :code:`global` keyword allows you to modify the variable outside the current scope.
+It is used to created a global variable and make changes to the varivable in a local context.
+
+**Rules of global keyword**
+
+The basic rules for :code:`global` keyword in python are:
+
+- When we create a variable inside a function, it is local by default
+- When we define a variable outside of a function, it is global by default.
+  You don't have to use :code:`global` keyword.
+- We use :code:`global` keyword to read and write a global variable inside a function.
+- Use of :code:`global` keyword outside a function has no effect.
+- In Python, we create a single module :code:`config.py` to hold global variables
+  and share information across Python modules within the same program.
+
+
+Numpy
+--------------------------
+
+mPA
+--------------------------
+
+Templates in C++
+--------------------------
+
+**What is templates in C++?**
+
+Templates in C++ is defined as a blueprint or formula for creating a generic class or a function.
+To simply put, you can create a single function or single class to work with different data types using templates.
+
+C++ template is also known as generic functions or classes which is a very powerful feature in C++.
+A keyword "template" in C++ is used for the template's syntax and angled bracket in parameter(t),
+which defines the data type variable.
+
+A template is a simple and yet very powerful tool in C++.
+The simple idea is to pass data type as a parameter so that we don't need to write the same code for different data types.
+
+C++ adds two new keywords to support templates: 'template' and 'typename'.
+The second keyword can always be replaced by keyword 'class'.
+
+**How do templates work?**
+
+Templates in C++ works in such a way that it gets expanded at compiler time, just like macros,
+and allows a function or class to work on different data types without being rewritten.
+
+**Types of Templates in C++**
+
+There are two types of templates in C++
+
+- Function templates
+- Class templates
+
+**What is the function template in C++?**
+
+Function template in C++ is a single function template that works with multiple data types simultaneously,
+but a standard function works only with one set of data types.
+
+**C++ Function template** Syntax
+
+.. code::
+
+   template <class type> ret-type func ()
+   {}
+
+Here, type is a placeholder name for a data type used by the function.
+It is used within the function definition.
+
+The class keyword is used to specify a generic type in a template declaration.
+
+**What is class template in C++?**
+
+The class template in C++ is like function templates.
+They are known as generic templates.
+They define a family of classes in C++.
+
+.. code::
+
+   template <class Ttype>
+   class class_name
+   {
+   // class body;
+   }
+
+Here Ttype is a placeholder type name, which will be specified when a class instantiated.
+
+The Ttype can be used inside the body of the class.
+
+
+Templates are expanded compiler time. This is like macros.
+The difference is, the compiler does type checking before template expansion.
+The idea is simple, source code contains only function/class, but compiled code may contain multiple copies of same function/class.
+
+**How do templates work in c++?**
+
+**Function templates**
+
+Function templates are special functions that can operate with *generic types*.
+This allows us to create a function template whose functionality can be adapted to more than one type or class
+without repeating the entire code for each type.
+
+In C++ this can be achieved using *template parameters*
+
+In C++ this can be achieved using *template parameters*.
+A template parameter is a special kind of parameter that can be used to pass a type as argument:
+just like regular function parameters can be used to pass values to a function,
+template parameters allow to pass also types to a function.
+These function templates can use these parameters as if they were any other regular type.
+
+The format for declaring function templates with type parameters is:
+
+.. code::
+   
+   template <class identifier> function_declaration;
+   template <typename identifier> function_declaration;
+
+The only difference between both prototypes is the use of either the keyword :code:`class` or the keyword :code:`typename`.
+Its use is indistinct, since both expressions have exactly the same meaning and behave exactly the same way.:118
+
