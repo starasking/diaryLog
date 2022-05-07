@@ -1,0 +1,44 @@
+2022-04
+==========
+
+04-11 周计划
+***************************
+
+
+
+
+类别不均衡问题之 loss
+***************************
+
+focal loss
+--------------------------
+
+focal loss 的基本思想是把注意力集中于那些预测不准的样本上
+
+GHM loss
+--------------------------
+
+GHM (gradient harmonizing mechanism) 认为不是所有的 hard example 都是值得关注的,
+一些 hard example 很可能是离群点（怎么判断是离群点），这些点是模型不应该关注的。
+
+GHM Loss 的改进思想有两点：
+
+1. 在模型继续保持对 hard example 关注的基础上，使模型不去关注离群样本
+
+Dice loss & DSC loss
+--------------------------
+
+.. math::
+
+        Dice = 2 \times \frac{y \cap \hat{y}}{y + \hat{y}} \\
+        Dice loss = 1 - Dice
+
+Dice coefficient
+--------------------------
+
+metric
+--------------------------
+
+By looking at the values of these metrics we can say that the model is learning well or not.
+
+sit down to write a book

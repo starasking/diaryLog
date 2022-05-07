@@ -1,0 +1,110 @@
+2022-03
+==========
+
+Git 命令
+***************************
+
+What is Git and the fundamentals of how it works
+
+Git thinks of its data more like a set of snapshots of a miniature filesystem.
+Git thinks about its data more like a **stream of snapshots**
+
+Because you have the entire history of the project right there on your local disk,
+most operations seem almost instantaneous.
+
+**Git Has Integrity**
+
+You can't lose information in transit or get file corruption without Git being able to delete it.
+
+Git has three main states that your files can reside in: committed, modified, and staged.
+Committed means that the data is safely stored in your local database.
+Modified means that you have changed the file but have not committed it to your database yet.
+Staged means you have marked a modified file in its current version to go into your next commit snapshot.
+
+This leads us to the three main sections of a Git project: the Git directory,
+the working directory, and the staging area.
+
+
+git-rebase
+---------------
+
+:code:`rebase` 和 :code:`merge` 本质上做的是一个事情，都是分支历史的合并。
+
+REBASE 打造线性的提交历史
+
+如何可视化 git 提交历史
+
+rebase 操作的思想上分为两个步骤：
+
+1. 确定 rebase 的对象：就是你改变的是哪个分支的提交，然后checkout 到次分支上。
+2. 选好 base: 选好作为基的提交，就是你要变到那条线上。
+3. 开始 re: rebase 基提交。
+
+Git Merge and Git Rebase serve the same purpose.
+They are designed to integrate changes from multiple branches into one.
+Although the final goal is the same, those two methods achieve it in different ways.
+
+Git Rebase
+-----------------
+
+Rebase is 
+
+
+Basic Branching and Merging
+-------------------------------
+
+When you switch branches, Git resets your working directory to like like it did the last time you committed on that branch.
+
+
+Stashing and Cleaning
+-------------------------------
+
+:code:`git stash` 会把所有未提交的修改都保存起来，用于后续恢复当前工作目录。
+stash 是本地的，不会通过:code:`git push` 命令上传到 git server 上。
+实际应用中推荐给每个 stash 加一个 message, 用于记录版本
+
+.. code::
+
+        git stash
+        git stash save "test-cmd-stash"
+
+可以通过:code:`git stash pop` 命令回复之前缓存的工作目录
+
+.. code::
+
+        git stash pop
+
+这个指令将荤菜堆栈中的第一个 stash 删除，并将对应修改应用到当前的工作目录下。
+也可以适用:code:`git stash apply` 命令，将缓存堆栈中的 stash 多次应用到工作目录中，但并不删除 stash 拷贝。
+在使用:code:`git stash apply` 命令时，可以通过名字之指定使用哪个 stash，默认使用最近的 stash (即 stash@{0})
+
+.. code::
+
+        git stash apply
+
+查看现有 stash，可以使用:code:`git stash list`
+
+.. code::
+
+        git stash list
+        git stash pop stash@{0}
+
+使用:code:`git stash clear` 命令，删除所有缓存的 stash。
+
+使用:code:`git stash show` 命令，后面可以跟 stash 名字，查看指定 stash 的 diff
+该命令后面添加:code:`-p` 或:code:`--patch` 可以查看特定 stash 的全部的 diff
+
+git cat-file
+------------------
+
+.. code::
+
+        git cat-file -p
+
+Some of the goals of Git design
+
+* Speed
+* Simple design
+* Strong support for non-linear development
+* Fully distributed
+* Able to handle large projects

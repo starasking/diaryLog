@@ -20,6 +20,10 @@ Welcome to Xuemei'dairy log
 
    log_2022_01
    log_2022_02
+   log_2022_03
+   log_2022_04
+   TechNotes/mnasnet
+   TechNotes/efficientnet
 
 
 

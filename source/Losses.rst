@@ -279,16 +279,8 @@ If a class contains a virtual function then compiler itself does two things.
 
 .. image::    VirtualFunctionInC.png
 
-Virtual Destructor in C++
+Virtual Destructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A destructor in C++ is a member function of a class used to free the space occupied by or
-delete an object of the class that goes out of scope.
-A destructor has the same name as the name of the constructor function in a class,
-but the destructor uses a tilde sign before its function name.
-
-A virtual destructor is used to free up the memory space allocated by the derived class object or instance
-while deleting instances of the derived class using a base class pointer object.
 
 Deleting a derived class object using a pointer of base class type that has a non-virtual destructor results in undefined behavior.
 To correct this situation, the base class should be defined with a virtual destructor.
@@ -370,49 +362,42 @@ Non-const functions can only be called by non-const objects.
 
 inline keyword in c++
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Inline function is one of the important feature in C++.
-
-When the program executes the function call instruction
-the CPU stores the memory address of the instruction following the function call,
+When the program executes the function call instruction the CPU stores the memory address of the instruction following the function call,
 copies the arguments of the function on the stack and finally transfers control to the specified function.
-The CPU then executes the function code,
-stores the function return value in a predefined memory location/register
+The CPU then executes the function code, stores the function return value in a predefined memory location/register
 and returns control to the calling function.
-This can become overhead if the execution time of function is less than the switching time
-from the called function to called function (callee).
+This can become overhead if the execution time of function is less than the switching time from the called function to called function (callee).
 For functions that are large and/or perform complex tasks,
 the overhead of the function call is usually insignificant compared to the amount of time the function takes to run.
-However, for small, commonly-used functions,
-the time needed to make the function call is often a lot more
+However, for small, commonly-used functions, the time needed to make the function call is often a lot more
 than the time needed to actually execute the function's code.
 This overhead occurs for small functions because execution time of small function is less than the switching time.
 
 C++ provides an inline functions to reduce the function call overhead.
 Inline function is a function that is expanded in line when it is called.
-When the inline function is called whole code of the inline function gets inserted or
-substituted at the point of inline function call.
+When the inline function is called whole code of the inline function gets inserted or substituted at the point of inline function call.
 This substitution is performed by the C++ compiler at compile time.
 Inline function may increase efficiency if it is small.
 
-Inline is only a request to the compiler, not a command.
-Compiler can ignore the request for inlining.
-Compiler may not perform inlining in such circumstances like:
 
-1. If a function contains a loop.
-2. If a function contains static variables.
-3. If a function is recursive.
-4. If a function return type is other than void, and the return statement doesn't exist in funciton body.
-5. If a function contains switch or goto statement.
+Inline function is one of the important feature in C++.
 
-disadvantages:
+When the program executes the function call instruction
+the CPU stores the memory address of the instruction following the function call,
+copies the arguments of the function on the stack and
+finally transfers control to the specified function.
+The CPU then executes the function code,
+stores the function return value in a predefined memory location/register
+and returns control to the calling function.
+This can become overhead if the execution time of function is less than the switching time
+from the caller function to called function (callee).
+For functions that are large and/or perform complex tasks,
+the overhead of the function call is usually insignificant compared to the amount of time the function takes to run.
+However, for small, commonly-used functions,
+the time needed to make the function call is often a lot more than the time needed to make the function call is often a lot more than
+the time needed to actually execute the function's code.
+This overhead occurs for small functions because execution time of small function is less than the switching time.
 
-1. The added variables from the inlined function consumes additional registers,
-
-It is also possible to define the inline function inside the class.
-In fact, all the functions defined inside the class are implicitly inline.
-If you need to explicitly declare inline function in the class then just declare the function inside the class
-and define it outside the class using inline keyword.
 
 protected keyword in c++
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

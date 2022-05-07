@@ -108,21 +108,43 @@ The basic rules for :code:`global` keyword in python are:
 
 
 Numpy
---------------------------
+***************************
 
 mPA
 --------------------------
 
-Templates in C++
---------------------------
+AP (Average Precision) is a popular metric in measuring the accuracy of object detection.
+Average precision computes the average precision value for recall value over 0 to 1.
 
-**What is templates in C++?**
+The general definition for the Average Precision (AP) is finding the area under the precision-recall curve.
+
+**Precision** measures how accurate is your predictions. i.e.,
+the percentage of your predictions are correct.
+
+**Recall** measures how good you find all the positives.
+
+.. math::
+
+   & Precision = \frac{TP}{TP + FP} \\
+   & Recall = \frac{TP}{TP + FN} \\
+   & F_1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+
+
+mPA: mean Average Precision, is the average of AP.
+In some context, we compute the AP for each class and average them.
+
+
+Templates in C++
+***************************
+
+What is templates in C++?
+--------------------------
 
 Templates in C++ is defined as a blueprint or formula for creating a generic class or a function.
 To simply put, you can create a single function or single class to work with different data types using templates.
 
 C++ template is also known as generic functions or classes which is a very powerful feature in C++.
-A keyword "template" in C++ is used for the template's syntax and angled bracket in parameter(t),
+A keyword "template" in C++ is used for the template's syntax and angled bracket in a parameter(s),
 which defines the data type variable.
 
 A template is a simple and yet very powerful tool in C++.
@@ -131,61 +153,104 @@ The simple idea is to pass data type as a parameter so that we don't need to wri
 C++ adds two new keywords to support templates: 'template' and 'typename'.
 The second keyword can always be replaced by keyword 'class'.
 
-**How do templates work?**
+How do templates work in C++?
+------------------------------
 
 Templates in C++ works in such a way that it gets expanded at compiler time, just like macros,
 and allows a function or class to work on different data types without being rewritten.
 
-**Types of Templates in C++**
+Templates are expanded at compiler time.
+The difference is, the compiler does type checking before template expansion.
+The idea is simple, source code contains only function/class,
+but compiled code may contain multiple copies of the same function/class.
+
+Types of Templates in C++
+--------------------------
 
 There are two types of templates in C++
 
 - Function templates
 - Class templates
 
-**What is the function template in C++?**
+What is the function template in C++?
+--------------------------------------------
 
 Function template in C++ is a single function template that works with multiple data types simultaneously,
 but a standard function works only with one set of data types.
 
-**C++ Function template** Syntax
 
 .. code::
 
-   template <class type> ret-type func ()
-   {}
-
-Here, type is a placeholder name for a data type used by the function.
-It is used within the function definition.
+   using namespace std;
+   template <class X>
+   X func(X a, X b) {
+        return (a > b? a: b);
+   }
 
 The class keyword is used to specify a generic type in a template declaration.
 
-**What is class template in C++?**
+What is class template in C++?
+--------------------------------------------
 
 The class template in C++ is like function templates.
 They are known as generic templates.
 They define a family of classes in C++.
 
+A class template starts with the keyword :code:`template` followed by template parameter(s)
+inside :code:`<>` which is followed by the class declaration.
+
 .. code::
 
-   template <class Ttype>
-   class class_name
-   {
-   // class body;
-   }
+   template <class T>
+   class className {
+   private:
+           T var;
+           ...
+   public:
+           T func(T arg);
+           ...
+   };
 
-Here Ttype is a placeholder type name, which will be specified when a class instantiated.
+In the above declaration, :code:`T` is the template argument which is a placeholder for the data type used,
+and :code:`class` is a keyword.
 
-The Ttype can be used inside the body of the class.
+Inside the class body, a member variable :code:`var` and a member function :code:`func()` are both of type :code:`T`.
 
+Class Templates like function templates, class templates are useful
+when a class defines something that is independent of the data type.
+Can be useful for classes like linkedList, BinaryTree, Stack, Queue, Array, etc.
+
+The relationship between a class template and an individual class is like the relationship between a class and individual object.
+An individual class defines how a group of objects can be constructed, while a class template defines how a group of classes can be generated.
+
+Creating a Class Template Object
+--------------------------------------------
+
+Once we've declared and defined a class template, we can create its objects in other classes or functions
+(such as the :code:`main()` function) with the following syntax
+
+.. code::
+
+   className<dataType> classObject;
+
+For example:
+
+.. code::
+
+   className<int> classObject;
+   className<float> classObject;
+   className<string> classObject;
+
+How do templates work in c++?
+--------------------------------------------
 
 Templates are expanded compiler time. This is like macros.
 The difference is, the compiler does type checking before template expansion.
 The idea is simple, source code contains only function/class, but compiled code may contain multiple copies of same function/class.
 
-**How do templates work in c++?**
 
-**Function templates**
+Function templates
+--------------------------------------------
 
 Function templates are special functions that can operate with *generic types*.
 This allows us to create a function template whose functionality can be adapted to more than one type or class
@@ -209,3 +274,66 @@ The format for declaring function templates with type parameters is:
 The only difference between both prototypes is the use of either the keyword :code:`class` or the keyword :code:`typename`.
 Its use is indistinct, since both expressions have exactly the same meaning and behave exactly the same way.:118
 
+Can there be more than one arguments to tmeplates?
+-----------------------------------------------------
+
+Yes, like normal parameters, we can pass more than one data types as arguments to templates.
+
+.. code::
+
+   using namespace std;
+   template < class T, class U>
+   class A {
+        T x;
+        U y;
+   public:
+        A() {
+                cout << "Constructor Called" << endl;
+        }
+   }
+
+   int main() {
+        A <char, char> a;
+        A <int, double> b;
+        return 0;
+   }
+
+Git commands
+***************************
+
+To delete a local branch in Git, you simply run
+
+.. code-block:: bash
+
+   git branch -d <branch-name>
+
+If the branch contains unmerged changes, though, Git will refuse to delete it.
+If you're sure you want to do it, you'll have to force the deletion by replacing 
+the -d parameter with uppercase D:
+
+.. code-block:: bash
+
+   git branch -D <branch-name>
+
+You don't use the git branch command to delete a remote branch.
+You use :code:`git push`
+
+.. code-block:: bash
+
+   git push --delete <remote name> <branch name>
+
+Difference between Concurrency and Palallelism
+************************************************
+
+**Concurrency:**
+
+Concurrency relates to an application that is processing more than one task at the same time.
+Concurrency is an approach that is used for decreasing the response time of the system
+by using the single processing unit.
+
+python -u
+************************************************
+
+In python, if we use :code:`print()` function to display text,
+stdout will save the text in a buffer, then display it on the screen.
+However, if you use python -u, code:`print()` will make stdout (our screen) display string text directly.
