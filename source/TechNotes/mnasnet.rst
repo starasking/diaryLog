@@ -6,25 +6,31 @@ MnasNet
 :Date: 2019
 :NoteBy: Xuemei, 2022
 
-we propose an automated mobile neural architecture search (MnasNet) approach.
+we propose an automated mobile neural architecture search (MnasNet) approach. (自动，手机上应用，网络架构搜素方法)
 
 To further strike the right balance between flexibility and search space size,
 we propose a novel factorized hierarchical search space that encourages layer diversity throughout the network
+(灵活性和搜索范围之间的平衡？如何确保网络层级的多样性，怎么保证你搜索到了呢？)
 
 Experimental results show that our approach consistently outperforms state-of-the-art mobile CNN models across multiple vision tasks.
+(多任务上都有上佳表现)
 
-On the ImageNet classification task, our MnasNet achieves 75.2% top-1 accuracy with 78 ms latency on a Pixel phtone,
+On the ImageNet classification task, our MnasNet achieves 75.2% top-1 accuracy with 78 ms latency on a Pixel phone,
 which is :math:`1.8\times` faster than MobileNetV2 with 0.5% higher accuracy and
-:math:`2.3\times` faster than NASNet with 1.2% higher accuracy.
+:math:`2.3\times` faster than NASNet with 1.2% higher accuracy. (三个网络在同一任务上，针对准确率和速度的比较)
 
-Our MnasNet also achieves better mAP quality than MobileNets for COCO object detection.
+Our MnasNet also achieves better mAP quality than MobileNets for COCO object detection. (更综合的指标 mAP)
+
 
 https://github.com/tensorflow/tpu/tree/master/models/official/mnasnet
 
 To summarize, our main contributions are as follows:
 
 1. We introduce a *multi-objective* neural architecture search approach that optimizes both accuracy and real-world latency on mobile devices.
-2. We propose a novel *factorized hierarchical search space* to enable layer diversity yet still strike the right balance between filexibility and search space size.
+2. We propose a novel *factorized hierarchical search space* to enable layer diversity
+   yet still strike the right balance between filexibility and search space size.
+3. We demonstrate new state-of-art accuracy on both ImageNet classification and COCO object detection
+   under typical mobile latency constraints.
 
 
 Related Work
@@ -73,13 +79,12 @@ but their search process optimizes on small tasks like CIIFAR.
 In contrast, this paper targets real-world mobile latency constraints and focuses on larger tasks
 like ImageNet classification and COCO object detection.
 
+
 Problem Formulation
 ========================
 
 We formulate the design problem as a multi-objective search, aiming at finding CNN models with both high-accuracy and low inference latency.
 
-Mobile Neural Architecture Search
-====================================
 
 Given a model :math:`m`, let :math:`ACC(m)` denote its accuracy on the target task,
 :math:`LAT(m)` denotes the inference latency on the target mobile platform,
@@ -115,11 +120,10 @@ where :math:`\omega` is the weight factor defined as:
 
 .. math::
 
-        m = \left\{
-                \begin{align*}
-                \alpha,\quad  & if \quad LAT(m) \le T\\
-                \beta,\quad  & otherwise
-                \end{align*}
+        m = \begin{cases}
+            \alpha,  & if \quad LAT(m) \le T\\
+            \beta,  & otherwise
+            \end{cases}
 
 where :math:`\alpha` and :math:`\beta` are application-specific constants.
 An empirical rule for picking :math:`\alpha` and :math:`\beta` is to ensure
@@ -128,11 +132,14 @@ For instance, we empirically observed doubling the latency usually brings about 
 Given two models:
 
         * M1 has latency :math:`l` and accuracy :math:`a`;
-        * M2 has latency :math:`2l` and 5% highere accuracy :math:`a\cdot ( 1 + 5% )`,
+        * M2 has latency :math:`2l` and 5% highere accuracy :math:`a\cdot ( 1 + 5\% )`,
 
 They should have similar reward:
-:math:`Reward(M2) = a\cdot( 1 + 5% ) \cdot(2l/T)^{\beta}` 
+:math:`Reward(M2) = a\cdot( 1 + 5\% ) \cdot(2l/T)^{\beta}` 
 
+
+Mobile Neural Architecture Search
+====================================
 
 Factorized Hierarchical Search Space
 ---------------------------------------
@@ -346,31 +353,84 @@ then we use a 1x1 convolution to reduce the number of channels so input and outp
 mAP
 
 SqueezeNet (2016 DeepScale, California, Berkeley, Stanford)
+---------------------------------------------------------------
 
-SqueezeNet is a smaller network that was designed as a more compace replacement for AlexNet.
-It has almost :math:`50\times` fewer parameters than AlenNex,
-yet it preforms :math:`3\times` faser.
+SqueezeNet is a smaller network that was designed as a more compact replacement for AlexNet.
+It has almost :math:`50\times` fewer parameters than AlenNex, yet it preforms :math:`3\times` faster.
+This architecture was proposed by researchers at DeepScale, The University of California, Berkeley,
+and Stanford University in the 2016.
 
+`SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size <https://arxiv.org/abs/1602.07360>`_
 
+Below are the key ideas behind SqueezeNet:
 
-
-
-
-
-
-
-
-
-
+    * Strategy One: use :math:`1\times 1` filters instead of :math:`3\times 3` (不考虑和邻居的关系, 参数减少 9 倍)
+    * Strategy Two: decrease the number of input channels to :math:`3 \times 3` (减少:math:`3\times3` 的通道数, 减少有邻居有关的特征)
+    * Strategy Three: Downsample late in the network so that convolution layers have large activation maps. (增加网络的计算量)
 
 
+**Summary**
+
+    * Strategies 1 and 2 are about judiciously decreasing the quality of parameters in a CNN
+      while attempting to preserve accuracy.
+    * Strategy 3 is about maximizing accuracy on a limited budget of parameters.
+
+**Goal of development**
+
+The idea behind designing SqueezeNet, was to create a smaller neural network with fewer parameters
+(hence lesser computations and lesser memory requirements and low inference time)
+that can easily fit into memory devices and can more easily be transmitted over a computer network.
+
+.. image:: latency.png
+  
+
+Summarizing AlexNet model:
+Model Size: 240mb without compression methods.
+Accuracy: 80.3% Top-5 ImageNet, 57.2% Top-1 ImageNet
 
 
+The Fire module comprises:
+
+A **squeeze convolution layer** (which has only :math:`1\times 1` filters),
+feeding into an **expand layer** that has a mix of :math:`1 times 1` and :math:`3\times 3` convolution filters.
+
+squeeze or expand refer to number of channel.
+
+.. image:: squeezenetfire.png
+
+.. image:: squeezetable.png
+
+.. image:: squeezenetlite.png
+
+Compression techniques
+-----------------------------
+
+    * Pruning
+    * Quantization
+    * Low-rank approximation and sparsity
+    * Knowledge distillation
+    * Neural Architecture Search (NAS)
+
+`An Overview of Model Compression Techniques for Deep Learning in Space <https://medium.com/gsi-technology/an-overview-of-model-compression-techniques-for-deep-learning-in-space-3fd8d4ce84e5>_`
+
+Pruning
+...................
+
+Pruning involves removing connections between neurons or entire neurons, channels, or filters from a trained network,
+which is done by zeroing out values in its weights matrix or removing groups of weights entirely.
+
+This not only helps reduce the overall model size but also saves on computation time and energy.
+
+Quantization
+...................
+
+Quantization is the process of reducing the size of the weights that are there in the network.
 
 
+Huffman coding
+...................
 
-
-
-
-
-
+It is a lossless data compression algorithm.
+The idea is to assign variable-length codes to input characters,
+lengths of the assigned codes are based on the freqquencies of corresponding characters.
+The mose frequent character gets the smallest code and the least frequent character gets the largest code.

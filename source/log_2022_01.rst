@@ -329,7 +329,7 @@ Contrived example:
 Const member functions in C++
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A free function cannot be marked with "const" (after a function declaration?), only a method can.
+A free function cannot be marked with "const" (after a function declaration), only a method can.
 
 A method (a function that belongs to a class) marked with "const", has the type of its "this" pointer turned into const.
 
@@ -365,7 +365,11 @@ Not adding the const at the end (:code:`int Foo::Bar (int random_arg) const`) ca
 with a const this pointer: :code:`int Foo_Bar (const Foo* this, int random_arg)`.
 Since the type of :code:`this` in such case is const, no modifications of member variables are possible.
 
-When a function is declared as :code:`const`, it can be called on any type of object.
+A function becomes const when the const keywork is used in the function's declaration.
+The idea of const functions is not to allow them to modify the object on which they are called.
+It is recommended the practice to make as many functions const as possible so that accidental changes to objects are avoided.
+
+When a function is declared as const, it can be called on any type of objects.
 Non-const functions can only be called by non-const objects.
 
 inline keyword in c++

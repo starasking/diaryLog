@@ -110,7 +110,7 @@ The basic rules for :code:`global` keyword in python are:
 Numpy
 ***************************
 
-mPA
+mAP
 --------------------------
 
 AP (Average Precision) is a popular metric in measuring the accuracy of object detection.
@@ -120,18 +120,54 @@ The general definition for the Average Precision (AP) is finding the area under 
 
 **Precision** measures how accurate is your predictions. i.e.,
 the percentage of your predictions are correct.
+It is a measure of "when your model predicts how often does it predicts correctly?"
+It indicates how much we can rely on the model's positive predictions.
 
 **Recall** measures how good you find all the positives.
+It is a measure of "has your model predicted every time that it should have predicteded?"
+It indicates any predictions that it should not have missed if the model is missing.
+
+high recall but low precision (实际没病说成有病，实际有病的都能检测出来，错检)
+high precision but low recall (实际有病的没检测处理，实际没病的都说没病，漏检)
+
+AUC (Area Under the Curve) covers the area underneath the precision-recall curve.
 
 .. math::
 
    & Precision = \frac{TP}{TP + FP} \\
    & Recall = \frac{TP}{TP + FN} \\
-   & F_1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+   & F_1 = 2 \times \frac{Precision \times Recall}{Precision + Recall} \\
+   & AUC = \int_0^1 prec(rec) d(rec)
 
 
-mPA: mean Average Precision, is the average of AP.
+mAP: mean Average Precision, is the average of AP.
 In some context, we compute the AP for each class and average them.
+
+Mean Average Precision (mAP) is a metric used to evaluate object detection models.
+
+The mean of average precision values are calculated over recall values from 0 to 1.
+mAP is commonly used to analyze the performance of
+object detection and segmentation systems.
+
+Many object detection algorithms use mAP to evaluate their models.
+The mAP is also used across several benchmark challenges such as Pascal, VOC, COCO, etc.
+
+.. image:: map.png
+
+
+Intersection over Union (IoU)
+.. math::
+
+        IoU = \frac{Area of Overlap}{Area of Union}
+
+Mean Average Precision is the average of AP of each class.
+
+mAP incorporates the trade-off between precision and recall and considers
+both false positives (FP) and false negatives (FN).
+
+
+AP is one way of calculating the area under the 
+
 
 
 Templates in C++
